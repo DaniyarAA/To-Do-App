@@ -3,26 +3,26 @@ package model;
 import java.time.LocalDateTime;
 
 public class Task {
-    private String name;
+    private String title;
     private String description;
     private LocalDateTime createDate;
-    private LocalDateTime finishDate;
+    private LocalDateTime completionDate;
     private String priority;
 
-    public Task(String name, String description, LocalDateTime createDate, LocalDateTime finishDate, String priority) {
-        this.name = name;
+    public Task(String title, String description, LocalDateTime createDate, LocalDateTime comletionDate, String priority) {
+        this.title = title;
         this.description = description;
         this.createDate = createDate;
-        this.finishDate = finishDate;
+        this.completionDate = comletionDate;
         this.priority = priority;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTitle(String name) {
+        this.title = title;
     }
 
     public String getDescription() {
@@ -41,12 +41,12 @@ public class Task {
         this.createDate = createDate;
     }
 
-    public LocalDateTime getFinishDate() {
-        return finishDate;
+    public LocalDateTime getCompletionDate() {
+        return completionDate;
     }
 
-    public void setFinishDate(LocalDateTime finishDate) {
-        this.finishDate = finishDate;
+    public void setCompletionDate(LocalDateTime completionDate) {
+        this.completionDate = completionDate;
     }
 
     public String getPriority() {
@@ -60,10 +60,10 @@ public class Task {
     @Override
     public String toString() {
         return "Task{" +
-                "name='" + name + '\'' +
+                "title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", createDate=" + createDate +
-                ", finishDate=" + finishDate +
+                ", finishDate=" + completionDate +
                 ", priority='" + priority + '\'' +
                 '}';
     }
