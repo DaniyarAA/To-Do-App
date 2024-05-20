@@ -22,7 +22,6 @@ public enum Status {
         @Override
         public void deleteTask(Task task) {
             System.out.println("Задача удалена");
-//            taskManager.deleteTask(task);
         }
     },
     IN_PROGRESS("В ПРОЦЕССЕ") {

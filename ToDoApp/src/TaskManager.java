@@ -30,8 +30,14 @@ public class TaskManager {
                     "5 - Изменить статус задачи\n" +
                     "6 - Показать задачи по определенной сортировке\n" +
                     "0 - Выйти");
-            int choice = scanner.nextInt();
-            scanner.nextLine();
+            String input = scanner.nextLine();
+            int choice;
+            try {
+                choice = Integer.parseInt(input);
+            } catch (NumberFormatException e) {
+                System.out.println("Неверный выбор. Попробуйте заново");
+                continue;
+            }
             switch (choice) {
                 case 1:
                     printAllTasks();
@@ -39,6 +45,7 @@ public class TaskManager {
                 case 2:
                     System.out.print("Введите номер задачи для отображения: ");
                     int taskNumber = scanner.nextInt();
+                    scanner.nextLine();
                     printTask(taskNumber - 1);
                     break;
                 case 3:
@@ -47,11 +54,13 @@ public class TaskManager {
                 case 4:
                     System.out.print("Введите номер задачи для удаления: ");
                     int deleteNumber = scanner.nextInt();
+                    scanner.nextLine();
                     deleteTask(deleteNumber - 1);
                     break;
                 case 5:
                     System.out.print("Введите номер задачи для изменения статуса: ");
                     int changeStatusNumber = scanner.nextInt();
+                    scanner.nextLine();
                     changeTaskStatus(changeStatusNumber - 1);
                     break;
                 case 6:
@@ -116,7 +125,6 @@ public class TaskManager {
                 task.getStatus().deleteTask(task);
                 taskList.remove(index);
                 taskReader.saveTasks(taskList);
-                System.out.println("Задача удалена.");
             } catch (IllegalStateException e) {
                 System.out.println(e.getMessage());
             }
@@ -173,6 +181,7 @@ public class TaskManager {
                 "2 - По описанию\n" +
                 "3 - По дате создания");
         int choice = scanner.nextInt();
+        scanner.nextLine();
         switch (choice){
             case 1:
                 sortTasksByPriority();

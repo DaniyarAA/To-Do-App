@@ -26,9 +26,6 @@ public class Task {
         return title;
     }
 
-    public void setTitle(String name) {
-        this.title = title;
-    }
 
     public String getDescription() {
         return description;
