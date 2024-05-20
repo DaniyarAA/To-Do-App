@@ -40,7 +40,7 @@ public class TaskManager {
                 case 4:
                     System.out.print("Введите номер задачи для удаления: ");
                     int deleteNumber = scanner.nextInt();
-
+                    deleteTask(deleteNumber - 1);
                     break;
                 case 5:
                     System.out.print("Введите номер задачи для изменения статуса: ");
@@ -83,9 +83,20 @@ public class TaskManager {
         }
     }
 
-    public void deleteTask(Task task){
-        taskList.remove(task);
-        taskReader.saveTasks(taskList);
+    public void deleteTask(int index) {
+        if (index >= 0 && index < taskList.size()) {
+            Task task = taskList.get(index);
+            try {
+                task.getStatus().deleteTask(task);
+                taskList.remove(index);
+                taskReader.saveTasks(taskList);
+                System.out.println("Задача удалена.");
+            } catch (IllegalStateException e) {
+                System.out.println(e.getMessage());
+            }
+        } else {
+            System.out.println("Неверный номер задачи.");
+        }
     }
 
     public void printAllTasks(){
