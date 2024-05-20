@@ -45,6 +45,7 @@ public class TaskManager {
                 case 5:
                     System.out.print("Введите номер задачи для изменения статуса: ");
                     int changeStatusNumber = scanner.nextInt();
+                    changeTaskStatus(changeStatusNumber - 1);
                     break;
                 case 6:
                     break;
@@ -91,6 +92,21 @@ public class TaskManager {
                 taskList.remove(index);
                 taskReader.saveTasks(taskList);
                 System.out.println("Задача удалена.");
+            } catch (IllegalStateException e) {
+                System.out.println(e.getMessage());
+            }
+        } else {
+            System.out.println("Неверный номер задачи.");
+        }
+    }
+
+    public void changeTaskStatus(int index) {
+        if (index >= 0 && index < taskList.size()) {
+            Task task = taskList.get(index);
+            try {
+                task.getStatus().changeStatus(task);
+                taskReader.saveTasks(taskList);
+                System.out.println("Статус задачи изменен.");
             } catch (IllegalStateException e) {
                 System.out.println(e.getMessage());
             }
