@@ -18,6 +18,7 @@ public class Task {
         this.createDate = createDate;
         this.completionDate = comletionDate;
         this.priority = priority;
+        this.status = Status.NEW;
     }
 
     public String getTitle() {

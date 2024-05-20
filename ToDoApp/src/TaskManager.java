@@ -1,29 +1,86 @@
 import model.Task;
 import util.TaskReader;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 public class TaskManager {
     private List<Task> taskList;
     private TaskReader taskReader;
+    private Scanner scanner = new Scanner(System.in);
 
     public TaskManager(){
         taskList = taskReader.loadTasks();
     }
 
     public void showMenu(){
-        System.out.println("Выберите действие:\n" +
-                "1 - Показать все задачи\n" +
-                "2 - Показать одну задачу с описанием\n" +
-                "3 - Добавить новую задачу\n" +
-                "4 - Удалить задачу\n" +
-                "5 - Показать задачу по определенной сортировке");
+        while (true){
+            System.out.println("Выберите действие:\n" +
+                    "1 - Показать все задачи\n" +
+                    "2 - Показать одну задачу с описанием\n" +
+                    "3 - Добавить новую задачу\n" +
+                    "4 - Удалить задачу\n" +
+                    "5 - Изменить статус задачи\n" +
+                    "6 - Показать задачу по определенной сортировке\n" +
+                    "0 - Выйти");
+            int choice = scanner.nextInt();
+            switch (choice) {
+                case 1:
+                    printAllTasks();
+                    break;
+                case 2:
+                    System.out.print("Введите номер задачи для отображения: ");
+                    int taskNumber = scanner.nextInt();
+                    printTask(taskNumber - 1);
+                case 3:
+                    addTask();
+                    break;
+                case 4:
+                    System.out.print("Введите номер задачи для удаления: ");
+                    int deleteNumber = scanner.nextInt();
+
+                    break;
+                case 5:
+                    System.out.print("Введите номер задачи для изменения статуса: ");
+                    int changeStatusNumber = scanner.nextInt();
+                    break;
+                case 6:
+                    break;
+                case 7:
+                    taskReader.saveTasks(taskList);
+                    System.out.println("Выход из программы");
+                    return;
+                default:
+                    System.out.println("Неверный выбор. Попробуйте заново");
+            }
+        }
+
     }
-    public void addTask(Task task){
-        taskList.add(task);
-        taskReader.saveTasks(taskList);
+
+
+    public void addTask(){
+        try {
+            System.out.println("Введите название задачи:");
+            String title = scanner.nextLine();
+            System.out.println("Введите описание задачи:");
+            String description = scanner.nextLine();
+            System.out.println("Введите дату завершения задачи (в формате dd.mm.yyyy):");
+            String completionDateString = scanner.nextLine();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+            LocalDate completionDate = LocalDate.parse(completionDateString, formatter);
+            System.out.println("Введите приоритет задачи (низкий, средний, высокий): ");
+            String priority = scanner.nextLine();
+            LocalDateTime createDate = LocalDateTime.now();
+
+            Task task = new Task(title, description, createDate, completionDate.atStartOfDay(), priority);
+            taskList.add(task);
+            taskReader.saveTasks(taskList);
+            System.out.println("Задача добавлена");
+        } catch (Exception e){
+            System.out.println("Ошибка при вводе данных. Попробуйте заново");
+        }
     }
 
     public void deleteTask(Task task){
