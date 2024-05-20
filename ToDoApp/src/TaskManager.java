@@ -135,10 +135,12 @@ public class TaskManager {
         }
     }
 
-    public void printAllTasks(){
-        System.out.println("Все задачи: ");
-        for (int i = 0; i < taskList.size(); i++){
-            System.out.printf(" %s) %s \n", i + 1, taskList.get(i).getTitle());
+    public void printAllTasks() {
+        LocalDateTime now = LocalDateTime.now();
+        for (int i = 0; i < taskList.size(); i++) {
+            Task task = taskList.get(i);
+            String overdue = task.getCompletionDate().isBefore(now) ? " *просрочено*" : "";
+            System.out.printf("%d) %s%s\n", i + 1, task.getTitle(), overdue);
         }
     }
 
