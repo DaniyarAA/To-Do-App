@@ -12,11 +12,11 @@ public class Task {
     private String priority;
     private Status status;
 
-    public Task(String title, String description, LocalDateTime createDate, LocalDateTime comletionDate, String priority) {
+    public Task(String title, String description, LocalDateTime createDate, LocalDateTime completionDate, String priority) {
         this.title = title;
         this.description = description;
         this.createDate = createDate;
-        this.completionDate = comletionDate;
+        this.completionDate = completionDate;
         this.priority = priority;
         this.status = Status.NEW;
     }
