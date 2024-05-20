@@ -1,5 +1,7 @@
 package model;
 
+import enums.Status;
+
 import java.time.LocalDateTime;
 
 public class Task {
@@ -8,6 +10,7 @@ public class Task {
     private LocalDateTime createDate;
     private LocalDateTime completionDate;
     private String priority;
+    private Status status;
 
     public Task(String title, String description, LocalDateTime createDate, LocalDateTime comletionDate, String priority) {
         this.title = title;
@@ -55,6 +58,14 @@ public class Task {
 
     public void setPriority(String priority) {
         this.priority = priority;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
 
     @Override
