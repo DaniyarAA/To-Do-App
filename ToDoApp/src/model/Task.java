@@ -42,25 +42,16 @@ public class Task {
         return createDate;
     }
 
-    public void setCreateDate(LocalDateTime createDate) {
-        this.createDate = createDate;
-    }
 
     public LocalDateTime getCompletionDate() {
         return completionDate;
     }
 
-    public void setCompletionDate(LocalDateTime completionDate) {
-        this.completionDate = completionDate;
-    }
 
     public Priority getPriority() {
         return priority;
     }
 
-    public void setPriority(Priority priority) {
-        this.priority = priority;
-    }
 
     public Status getStatus() {
         return status;
