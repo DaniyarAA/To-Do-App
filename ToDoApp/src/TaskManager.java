@@ -12,12 +12,16 @@ public class TaskManager {
     private Scanner scanner = new Scanner(System.in);
 
     public TaskManager(){
+        taskReader = new TaskReader();
         taskList = taskReader.loadTasks();
+        if (taskList == null){
+            taskList = new ArrayList<>();
+        }
     }
 
     public void showMenu(){
         while (true){
-            System.out.println("Выберите действие:\n" +
+            System.out.println("\nВыберите действие:\n" +
                     "1 - Показать все задачи\n" +
                     "2 - Показать одну задачу с описанием\n" +
                     "3 - Добавить новую задачу\n" +
@@ -26,6 +30,7 @@ public class TaskManager {
                     "6 - Показать задачу по определенной сортировке\n" +
                     "0 - Выйти");
             int choice = scanner.nextInt();
+            scanner.nextLine();
             switch (choice) {
                 case 1:
                     printAllTasks();
@@ -34,6 +39,7 @@ public class TaskManager {
                     System.out.print("Введите номер задачи для отображения: ");
                     int taskNumber = scanner.nextInt();
                     printTask(taskNumber - 1);
+                    break;
                 case 3:
                     addTask();
                     break;
@@ -48,6 +54,7 @@ public class TaskManager {
                     changeTaskStatus(changeStatusNumber - 1);
                     break;
                 case 6:
+                    showSortMenu();
                     break;
                 case 7:
                     taskReader.saveTasks(taskList);
@@ -55,32 +62,45 @@ public class TaskManager {
                     return;
                 default:
                     System.out.println("Неверный выбор. Попробуйте заново");
+                    break;
             }
         }
 
     }
 
 
-    public void addTask(){
+    public void addTask() {
         try {
             System.out.println("Введите название задачи:");
             String title = scanner.nextLine();
+
             System.out.println("Введите описание задачи:");
             String description = scanner.nextLine();
-            System.out.println("Введите дату завершения задачи (в формате dd.mm.yyyy):");
+
+            System.out.println("Введите дату завершения задачи (в формате dd.MM.yyyy):");
             String completionDateString = scanner.nextLine();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
             LocalDate completionDate = LocalDate.parse(completionDateString, formatter);
+
             System.out.println("Введите приоритет задачи (низкий, средний, высокий): ");
             String priority = scanner.nextLine();
-            LocalDateTime createDate = LocalDateTime.now();
+            if (!priority.equals("низкий") && !priority.equals("средний") && !priority.equals("высокий")) {
+                throw new IllegalArgumentException("Некорректный приоритет. Доступные значения: низкий, средний, высокий.");
+            }
 
+            LocalDateTime createDate = LocalDateTime.now();
             Task task = new Task(title, description, createDate, completionDate.atStartOfDay(), priority);
+
             taskList.add(task);
             taskReader.saveTasks(taskList);
             System.out.println("Задача добавлена");
-        } catch (Exception e){
-            System.out.println("Ошибка при вводе данных. Попробуйте заново");
+        } catch (java.time.format.DateTimeParseException e) {
+            System.out.println("Ошибка при вводе даты. Убедитесь, что дата введена в формате dd.MM.yyyy.");
+        } catch (IllegalArgumentException e) {
+            System.out.println("Ошибка: " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("Неизвестная ошибка при вводе данных. Попробуйте заново.");
+            e.printStackTrace();
         }
     }
 
@@ -116,8 +136,9 @@ public class TaskManager {
     }
 
     public void printAllTasks(){
+        System.out.println("Все задачи: ");
         for (int i = 0; i < taskList.size(); i++){
-            System.out.printf(" %s) %s ", i + 1, taskList.get(i).getTitle());
+            System.out.printf(" %s) %s \n", i + 1, taskList.get(i).getTitle());
         }
     }
 
@@ -134,6 +155,28 @@ public class TaskManager {
                 taskList.get(number).getPriority(),
                 taskList.get(number).getStatus().getDescription()
                 );
+    }
+
+    public void showSortMenu(){
+        System.out.println("Выберите критерий сортировки:\n" +
+                "1 - По приоритету\n" +
+                "2 - По описанию\n" +
+                "3 - По дате создания");
+        int choice = scanner.nextInt();
+        switch (choice){
+            case 1:
+                sortTasksByPriority();
+                break;
+            case 2:
+                sortTasksByDescription();
+                break;
+            case 3:
+                sortByCreatedDate();
+                break;
+            default:
+                System.out.println("Неверный выбор. Попробуйте заново");
+        }
+        printAllTasks();
     }
 
     public void sortTasksByPriority(){
