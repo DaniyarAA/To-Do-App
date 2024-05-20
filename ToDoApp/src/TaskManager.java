@@ -1,3 +1,4 @@
+import enums.Priority;
 import model.Task;
 import util.TaskReader;
 
@@ -23,11 +24,11 @@ public class TaskManager {
         while (true){
             System.out.println("\nВыберите действие:\n" +
                     "1 - Показать все задачи\n" +
-                    "2 - Показать одну задачу с описанием\n" +
+                    "2 - Показать определенную задачу с дополнительной информацией\n" +
                     "3 - Добавить новую задачу\n" +
                     "4 - Удалить задачу\n" +
                     "5 - Изменить статус задачи\n" +
-                    "6 - Показать задачу по определенной сортировке\n" +
+                    "6 - Показать задачи по определенной сортировке\n" +
                     "0 - Выйти");
             int choice = scanner.nextInt();
             scanner.nextLine();
@@ -65,7 +66,6 @@ public class TaskManager {
                     break;
             }
         }
-
     }
 
 
@@ -83,13 +83,18 @@ public class TaskManager {
             LocalDate completionDate = LocalDate.parse(completionDateString, formatter);
 
             System.out.println("Введите приоритет задачи (низкий, средний, высокий): ");
-            String priority = scanner.nextLine();
-            if (!priority.equals("низкий") && !priority.equals("средний") && !priority.equals("высокий")) {
-                throw new IllegalArgumentException("Некорректный приоритет. Доступные значения: низкий, средний, высокий.");
-            }
+            String priorityString = scanner.nextLine().toLowerCase();
+            Priority priority = switch (priorityString) {
+                case "низкий" -> Priority.LOW;
+                case "средний" -> Priority.MEDIUM;
+                case "высокий" -> Priority.HIGH;
+                default ->
+                        throw new IllegalArgumentException("Некорректный приоритет. Доступные значения: низкий, средний, высокий.");
+            };
 
             LocalDateTime createDate = LocalDateTime.now();
-            Task task = new Task(title, description, createDate, completionDate.atStartOfDay(), priority);
+            LocalDateTime completionDateTime = completionDate.atTime(23, 59, 59);
+            Task task = new Task(title, description, createDate, completionDateTime, priority);
 
             taskList.add(task);
             taskReader.saveTasks(taskList);
@@ -136,11 +141,14 @@ public class TaskManager {
     }
 
     public void printAllTasks() {
+        if(taskList.isEmpty()){
+            System.out.println("Список задач пуст. Создайте новую");
+        }
         LocalDateTime now = LocalDateTime.now();
         for (int i = 0; i < taskList.size(); i++) {
             Task task = taskList.get(i);
             String overdue = task.getCompletionDate().isBefore(now) ? " *просрочено*" : "";
-            System.out.printf("%d) %s%s\n", i + 1, task.getTitle(), overdue);
+            System.out.printf("%d) %s%s (приоритет: %s)\n", i + 1, task.getTitle(), overdue, task.getPriority());
         }
     }
 
@@ -150,7 +158,7 @@ public class TaskManager {
                         "\nДата создания задачи: %s" +
                         "\nДата завершения задачи: %s" +
                         "\nПриоритет задачи: %s" +
-                        "\nСтатус задачи: %s", taskList.get(number).getTitle(),
+                        "\nСтатус задачи: %s\n", taskList.get(number).getTitle(),
                 taskList.get(number).getDescription(),
                 taskList.get(number).getCreateDate(),
                 taskList.get(number).getCompletionDate(),

@@ -1,5 +1,6 @@
 package model;
 
+import enums.Priority;
 import enums.Status;
 
 import java.time.LocalDateTime;
@@ -9,10 +10,10 @@ public class Task {
     private String description;
     private LocalDateTime createDate;
     private LocalDateTime completionDate;
-    private String priority;
+    private Priority priority;
     private Status status;
 
-    public Task(String title, String description, LocalDateTime createDate, LocalDateTime completionDate, String priority) {
+    public Task(String title, String description, LocalDateTime createDate, LocalDateTime completionDate, Priority priority) {
         this.title = title;
         this.description = description;
         this.createDate = createDate;
@@ -53,11 +54,11 @@ public class Task {
         this.completionDate = completionDate;
     }
 
-    public String getPriority() {
+    public Priority getPriority() {
         return priority;
     }
 
-    public void setPriority(String priority) {
+    public void setPriority(Priority priority) {
         this.priority = priority;
     }
 
