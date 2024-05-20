@@ -12,6 +12,15 @@ public class TaskManager {
     public TaskManager(){
         taskList = taskReader.loadTasks();
     }
+
+    public void showMenu(){
+        System.out.println("Выберите действие:\n" +
+                "1 - Показать все задачи\n" +
+                "2 - Показать одну задачу с описанием\n" +
+                "3 - Добавить новую задачу\n" +
+                "4 - Удалить задачу\n" +
+                "5 - Показать задачу по определенной сортировке");
+    }
     public void addTask(Task task){
         taskList.add(task);
         taskReader.saveTasks(taskList);
@@ -22,10 +31,25 @@ public class TaskManager {
         taskReader.saveTasks(taskList);
     }
 
-    public void printTasks(){
-        for(Task task:taskList){
-            System.out.println(task);
+    public void printAllTasks(){
+        for (int i = 0; i < taskList.size(); i++){
+            System.out.printf(" %s) %s ", i + 1, taskList.get(i).getTitle());
         }
+    }
+
+    public void printTask(int number){
+        System.out.printf("\nНазвание задачи: %s" +
+                        "\nОписание задачи: %s " +
+                        "\nДата создания задачи: %s" +
+                        "\nДата завершения задачи: %s" +
+                        "\nПриоритет задачи: %s" +
+                        "\nСтатус задачи: %s", taskList.get(number).getTitle(),
+                taskList.get(number).getDescription(),
+                taskList.get(number).getCreateDate(),
+                taskList.get(number).getCompletionDate(),
+                taskList.get(number).getPriority(),
+                taskList.get(number).getStatus().getDescription()
+                );
     }
 
     public void sortTasksByPriority(){

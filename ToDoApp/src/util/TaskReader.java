@@ -16,7 +16,7 @@ public class TaskReader {
             Type listType = new TypeToken<ArrayList<Task>>() {}.getType();
             return new Gson().fromJson(reader, listType);
         } catch (IOException e) {
-            System.out.println("No existing data found. Starting fresh.");
+            System.out.println("Файл с задачами не найден. Создайте задачи..");
             return new ArrayList<>();
         }
     }
@@ -25,7 +25,7 @@ public class TaskReader {
         try (Writer writer = new FileWriter("src/data/Tasks.json")) {
             new Gson().toJson(tasks, writer);
         } catch (IOException e) {
-            System.err.println("Error saving tasks data: " + e.getMessage());
+            System.err.println("Ошибка при сохранении задач: " + e.getMessage());
         }
     }
 }
