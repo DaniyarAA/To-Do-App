@@ -66,7 +66,7 @@ public class TaskManager {
                 case 6:
                     showSortMenu();
                     break;
-                case 7:
+                case 0:
                     taskReader.saveTasks(taskList);
                     System.out.println("Выход из программы");
                     return;
